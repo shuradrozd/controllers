@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="exampleApp">
+<head>
+	<meta charset="UTF-8">
+	<title>Controllers</title>
+	<script src="angular.js"></script>
+	<link href="bootstrap.css" rel="stylesheet" />
+	<link href="bootstrap-theme.css" rel="stylesheet" />
+	<script>
+		angular.module("exampleApp", [])
+		.controller("simpleCtrl", function($scope) {
+			
+			$scope.addresses = {};
+			
+			$scope.setAddress = function(type, zip) {
+				console.log("Type:" + type + " " + zip);
+			}
+
+			$scope.copyAddress = function() {
+				$scope.shippingZip = $scope.billingZip;
+			}
+			
+		});
+
+	</script>
+</head>
+<body>
+	<div class="well" ng-controller="simpleCtrl">
+		<h4>Billing Zip Code</h4>
+		<div class="form-group">	
+			<input type="text" class="form-control" ng-model="billingZip">
+		</div>	
+			<button class="btn btn-primary" ng-click="setAddress('billingZip', billingZip)">
+				Save Billing
+			</button>
+	</div>
+	<div class="well" ng-controller="simpleCtrl">
+		<h4>Shipping Zip Code</h4>
+		<div class="form-group">	
+			<input type="text" class="form-control" ng-model="shippingZip">
+		</div>	
+			<button class="btn btn-primary" ng-click="copyAddress()">
+			Use Billing
+			</button>
+			<button class="btn btn-primary" ng-click="setAddress('shippingZip', shippingZip)">
+				Save Shipping
+			</button>
+	</div> 
+	<div class="well">
+		<table class="table">
+			<thead>
+				<tr>
+					<th>#</th>
+					<th>type</th>
+				</tr>
+			</thead>
+			<tr ng-repeat="item in addresses">
+				<td>{{$index + 1}}</td>
+				<td>{{item}}</td>
+			</tr>
+		</table>
+	</div>
+</body>
+</html>
