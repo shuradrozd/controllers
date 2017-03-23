@@ -8,16 +8,21 @@
 	<link href="bootstrap-theme.css" rel="stylesheet" />
 	<script>
 		angular.module("exampleApp", [])
-		.controller("simpleCtrl", function($scope) {
+		.controller("simpleCtrl", function($scope, $rootScope) {
 			
-			$scope.addresses = {};
-			
+			$scope.$on("zipCodeUpdated", function(event, args){
+				$scope[args.type] = args.zipCode;
+			});
+
 			$scope.setAddress = function(type, zip) {
+				$rootScope.$broadcast("zipCodeUpdated", {
+					type: type, zipCode: zip
+				});
 				console.log("Type:" + type + " " + zip);
 			}
 
 			$scope.copyAddress = function() {
-				$scope.shippingZip = $scope.billingZip;
+				$scope.zip = $scope.billingZip;
 			}
 			
 		});
@@ -28,37 +33,23 @@
 	<div class="well" ng-controller="simpleCtrl">
 		<h4>Billing Zip Code</h4>
 		<div class="form-group">	
-			<input type="text" class="form-control" ng-model="billingZip">
+			<input type="text" class="form-control" ng-model="zip">
 		</div>	
-			<button class="btn btn-primary" ng-click="setAddress('billingZip', billingZip)">
+			<button class="btn btn-primary" ng-click="setAddress('billingZip', zip)">
 				Save Billing
 			</button>
 	</div>
 	<div class="well" ng-controller="simpleCtrl">
 		<h4>Shipping Zip Code</h4>
 		<div class="form-group">	
-			<input type="text" class="form-control" ng-model="shippingZip">
+			<input type="text" class="form-control" ng-model="zip">
 		</div>	
 			<button class="btn btn-primary" ng-click="copyAddress()">
 			Use Billing
 			</button>
-			<button class="btn btn-primary" ng-click="setAddress('shippingZip', shippingZip)">
+			<button class="btn btn-primary" ng-click="setAddress('shippingZip', zip)">
 				Save Shipping
 			</button>
 	</div> 
-	<div class="well">
-		<table class="table">
-			<thead>
-				<tr>
-					<th>#</th>
-					<th>type</th>
-				</tr>
-			</thead>
-			<tr ng-repeat="item in addresses">
-				<td>{{$index + 1}}</td>
-				<td>{{item}}</td>
-			</tr>
-		</table>
-	</div>
 </body>
 </html>
